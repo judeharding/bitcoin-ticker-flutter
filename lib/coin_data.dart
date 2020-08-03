@@ -29,3 +29,5 @@ const List<String> cryptoList = [
 ];
 
 class CoinData {}
+
+const apiKey = '';
