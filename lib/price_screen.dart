@@ -31,6 +31,8 @@ class _PriceScreenState extends State<PriceScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
+          //b1: Call getData() when the picker/dropdown changes.
+          getData();
         });
       },
     );
@@ -50,6 +52,12 @@ class _PriceScreenState extends State<PriceScreen> {
       itemExtent: 32.0,
       onSelectedItemChanged: (selectedIndex) {
         print(selectedIndex);
+        setState(() {
+          //a: Save the selected currency to the property selectedCurrency
+          selectedCurrency = currenciesList[selectedIndex];
+          //b2: Call getData() when the picker/dropdown changes.
+          getData();
+        });
       },
       children: pickerItems,
     );
@@ -57,18 +65,18 @@ class _PriceScreenState extends State<PriceScreen> {
 
   //12. Create a variable to hold the value and use in our Text Widget.  Give
   // the variable a starting value of '?' before the data comes back from the async methods.
-  String bitcoinValueInUSD = '?';
+  double bitcoinValue;
 
   //11. Create an async method here await the coin data from coin_data.dart
   void getData() async {
     try {
-      // getting coin data from coin_data.dart and put it into data
-      double data = await CoinData().getCoinData();
+      //We're now passing the selectedCurrency when we call getCoinData().
+      var data = await CoinData().getCoinData(selectedCurrency);
 
       //13. We can't await in a setState(). So you have to separate it out into two steps.
       setState(() {
-//        putting coin_data into bitcoinvalueinusd
-        bitcoinValueInUSD = data.toStringAsFixed(0);
+//        putting coin_data into bitcoinvalue
+        bitcoinValue = data;
       });
       //catching any errors from the api call in coin_data.dart
     } catch (e) {
@@ -100,13 +108,13 @@ class _PriceScreenState extends State<PriceScreen> {
               color: Colors.lightBlueAccent,
               elevation: 5.0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(50.0),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  //15. Update the Text Widget with the data in bitcoinValueInUSD.
-                  '1 BTC = $bitcoinValueInUSD USD',
+                  //15: Update the currency name depending on the selectedCurrency.
+                  '1 BTC = $bitcoinValue $selectedCurrency ',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -123,6 +131,7 @@ class _PriceScreenState extends State<PriceScreen> {
             color: Colors.lightBlue,
             //   is determined by dart:io PLATFORM
             child: Platform.isIOS ? iOSPicker() : androidDropdown(),
+//            child: androidDropdown(),
           ),
         ],
       ),
