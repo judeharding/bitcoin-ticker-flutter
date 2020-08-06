@@ -41,7 +41,8 @@ class CoinData {
       //Update the URL to use the crypto symbol from the cryptoList
       String requestURL =
 //          '$coinAPIURL/$crypto/$selectedCurrency?apikey=$apiKey';
-          "https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=$apiKey";
+//          "https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=$apiKey";
+          'https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=$apiKey';
       http.Response response = await http.get(requestURL);
       if (response.statusCode == 200) {
         var decodedData = jsonDecode(response.body);
