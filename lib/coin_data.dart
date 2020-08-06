@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:bitcoin_ticker/pvt.dart';
 
 const List<String> currenciesList = [
   'AUD',
@@ -28,7 +29,6 @@ const List<String> currenciesList = [
 const List<String> cryptoList = ['BTC', 'ETH', 'LTC'];
 
 const coinAPIURL = 'https://rest.coinapi.io/v1/exchangerate';
-const apiKey = 'YOUR-API-KEY-HERE';
 
 class CoinData {
   var crypto;
@@ -40,9 +40,9 @@ class CoinData {
     for (String crypto in cryptoList) {
       //Update the URL to use the crypto symbol from the cryptoList
       String requestURL =
-//          '$coinAPIURL/$crypto/$selectedCurrency?apikey=$apiKey';
+          '$coinAPIURL/$crypto/$selectedCurrency?apikey=$apiKey';
 //          "https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=$apiKey";
-          'https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=$apiKey';
+//          'https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=$apiKey';
       http.Response response = await http.get(requestURL);
       if (response.statusCode == 200) {
         var decodedData = jsonDecode(response.body);
